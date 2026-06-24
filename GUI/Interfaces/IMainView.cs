@@ -1,4 +1,5 @@
 ﻿using System;
+using DTO;
 
 namespace GUI.Interfaces
 {
@@ -8,5 +9,6 @@ namespace GUI.Interfaces
         void SetUserMenuVisibility(bool isVisible);
         void SetRoleMenuVisibility(bool isVisible);
         void SetProfileMenuVisibility(bool isVisible);
+        void DisplayUserProfile(UserProfileDTO profile);
     }
 }

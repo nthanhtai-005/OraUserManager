@@ -11,5 +11,6 @@ namespace DAL.Repositories.Interfaces
         AuthUserDTO GetAuthInfo(string username);
         bool TestDatabaseLogin(string username, string password);
         List<string> GetSessionPrivileges(string username, string password);
+        UserProfileDTO GetUserDashboardData(string username, string password);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using BLL.Security;
+using BLL.Services.Implementations;
+using BLL.Services.Interfaces;
 using GUI.Interfaces;
 
 namespace GUI.Presenters
@@ -6,12 +8,16 @@ namespace GUI.Presenters
     public class MainPresenter
     {
         private readonly IMainView _view;
-
-        public MainPresenter(IMainView view)
+        private readonly IAuthService _authService;
+        private readonly string _rawPassword;
+        public MainPresenter(IMainView view, IAuthService authService, string rawPassword)
         {
             _view = view;
+            _authService = authService;
+            _rawPassword = rawPassword;
 
             ApplySecurityPolicies();
+            LoadDashboardData();
         }
         private void ApplySecurityPolicies()
         {
@@ -32,6 +38,14 @@ namespace GUI.Presenters
                                     SessionContext.HasPrivilege("ALTER PROFILE") ||
                                     SessionContext.HasPrivilege("DROP PROFILE");
             _view.SetProfileMenuVisibility(canManageProfile);
+        }
+        private void LoadDashboardData()
+        {
+            // Lấy dữ liệu nghiệp vụ tổng hợp từ BLL
+            var profileData = _authService.GetLoggedInUserProfile(_rawPassword);
+
+            // Ra lệnh đẩy ngược lên View hiển thị
+            _view.DisplayUserProfile(profileData);
         }
     }
 }

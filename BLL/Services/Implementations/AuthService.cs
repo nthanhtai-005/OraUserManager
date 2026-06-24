@@ -1,6 +1,7 @@
 ﻿using BLL.Security;
 using BLL.Services.Interfaces;
 using DAL.Repositories.Interfaces;
+using DTO;
 
 namespace BLL.Services.Implementations
 {
@@ -38,6 +39,11 @@ namespace BLL.Services.Implementations
                 SessionContext.SystemPrivileges.Add(priv);
             }
             return true;
+        }
+        public UserProfileDTO GetLoggedInUserProfile(string rawPassword)
+        {
+            string currentUsername = SessionContext.CurrentUsername;
+            return _authRepo.GetUserDashboardData(currentUsername, rawPassword);
         }
     }
 }
