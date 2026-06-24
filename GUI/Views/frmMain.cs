@@ -20,21 +20,27 @@ namespace GUI.Views
         }
         public void DisplayUserProfile(UserProfileDTO profile)
         {
-
             lblWelcome.Text = $"👋 XIN CHÀO: {profile.FullName}";
             lblUsername.Text = $"Username: {profile.Username}";
             lblEmail.Text = $"Email: {profile.Email}";
             lblCreatedDate.Text = $"Ngày tham gia: {profile.CreatedDate:dd/MM/yyyy}";
 
+            lblAccountStatus.Text = $"Trạng thái: {profile.AccountStatus}";
+            lblLockDate.Text = $"Ngày khóa: {profile.LockDate}";
+            lblProfile.Text = $"Profile: {profile.ProfileName}";
+            lblDefaultTS.Text = $"Default TS: {profile.DefaultTablespace}";
+            lblTempTS.Text = $"Temp TS: {profile.TemporaryTablespace}";
+
             dgvRoles.DataSource = profile.Roles;
             dgvSysPrivs.DataSource = profile.SystemPrivileges;
             dgvObjPrivs.DataSource = profile.ObjectPrivileges;
+            dgvQuotas.DataSource = profile.Quotas;
 
             if (dgvRoles.Columns.Count > 0)
             {
                 dgvRoles.Columns["RoleName"].HeaderText = "Tên Vai Trò (Role)";
                 dgvRoles.Columns["IsDirect"].HeaderText = "Cấp Trực Tiếp?";
-                dgvRoles.Columns["AdminOption"].HeaderText = "Quyền Gán Cho Người Khác (Admin Option)";
+                dgvRoles.Columns["AdminOption"].HeaderText = "Quyền Gán Cho Người Khác";
             }
 
             if (dgvSysPrivs.Columns.Count > 0)
@@ -46,15 +52,22 @@ namespace GUI.Views
 
             if (dgvObjPrivs.Columns.Count > 0)
             {
-                dgvObjPrivs.Columns["ObjectName"].HeaderText = "Tên Bảng Dữ Liệu (Table)";
+                dgvObjPrivs.Columns["ObjectName"].HeaderText = "Tên Đối Tượng";
                 dgvObjPrivs.Columns["PrivilegeName"].HeaderText = "Thao Tác (Privilege)";
-                dgvObjPrivs.Columns["GrantedBy"].HeaderText = "Người Cấp Quyền (Grantor)";
-                dgvObjPrivs.Columns["Grantable"].HeaderText = "Quyền Cấp Tiếp (Grant Option)";
+                dgvObjPrivs.Columns["GrantedBy"].HeaderText = "Người Cấp Quyền";
+                dgvObjPrivs.Columns["Grantable"].HeaderText = "Quyền Cấp Tiếp";
+            }
+
+            if (dgvQuotas.Columns.Count > 0)
+            {
+                dgvQuotas.Columns["TablespaceName"].HeaderText = "Tên Tablespace";
+                dgvQuotas.Columns["Bytes"].HeaderText = "Đã Sử Dụng (Bytes)";
+                dgvQuotas.Columns["MaxBytes"].HeaderText = "Giới Hạn (Max Bytes)";
             }
         }
         public void SetUserMenuVisibility(bool isVisible)
         {
-            btnQuanLyUser.Visible = isVisible; 
+            btnQuanLyUser.Visible = isVisible;
         }
 
         public void SetRoleMenuVisibility(bool isVisible)
@@ -69,17 +82,29 @@ namespace GUI.Views
 
         private void btnQuanLyUser_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnQuanLyRole_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnQuanLyProfile_Click(object sender, EventArgs e)
         {
-            
+
+        }
+        public bool IsLogout { get; set; } = false;
+        public event EventHandler LogoutClicked;
+
+        public void CloseView()
+        {
+            this.Close();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            LogoutClicked?.Invoke(this, EventArgs.Empty);
         }
     }
 }

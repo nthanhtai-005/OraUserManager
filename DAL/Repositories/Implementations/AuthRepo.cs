@@ -84,26 +84,45 @@ namespace DAL.Repositories.Implementations
         {
             var profile = new UserProfileDTO();
 
-            // LƯU Ý BẢO MẬT 1: Lấy thông tin cá nhân bằng tài khoản ADMIN_BM hệ thống
-            string sqlInfo = "SELECT USERNAME, FULLNAME, EMAIL, CREATED_DATE FROM ADMIN_BM.APP_USERS WHERE USERNAME = :username";
+            // 1. Dùng tài khoản ADMIN_BM lấy Thông tin cá nhân + Profile + Status + Tablespace (Từ DBA_USERS)
+            string sqlInfo = @"
+                                SELECT a.USERNAME, a.FULLNAME, a.EMAIL, a.CREATED_DATE,
+                                d.ACCOUNT_STATUS, d.LOCK_DATE, d.PROFILE, d.DEFAULT_TABLESPACE, d.TEMPORARY_TABLESPACE
+                                FROM ADMIN_BM.APP_USERS a
+                                JOIN DBA_USERS d ON a.USERNAME = d.USERNAME
+                                WHERE a.USERNAME = :username";
+
             OracleParameter[] parameters = { new OracleParameter("username", username.ToUpper()) };
             DataTable dtInfo = _dbExecutor.ExecuteQuery(sqlInfo, parameters);
 
             if (dtInfo.Rows.Count > 0)
             {
-                profile.Username = dtInfo.Rows[0]["USERNAME"].ToString() ?? "";
-                profile.FullName = dtInfo.Rows[0]["FULLNAME"].ToString() ?? "";
-                profile.Email = dtInfo.Rows[0]["EMAIL"].ToString() ?? "";
-                profile.CreatedDate = Convert.ToDateTime(dtInfo.Rows[0]["CREATED_DATE"]);
+                DataRow row = dtInfo.Rows[0];
+                profile.Username = row["USERNAME"].ToString() ?? "";
+                profile.FullName = row["FULLNAME"].ToString() ?? "";
+                profile.Email = row["EMAIL"].ToString() ?? "";
+                profile.CreatedDate = Convert.ToDateTime(row["CREATED_DATE"]);
+
+                // Gán các thông tin mới
+                profile.AccountStatus = row["ACCOUNT_STATUS"].ToString() ?? "";
+                profile.ProfileName = row["PROFILE"].ToString() ?? "";
+                profile.DefaultTablespace = row["DEFAULT_TABLESPACE"].ToString() ?? "";
+                profile.TemporaryTablespace = row["TEMPORARY_TABLESPACE"].ToString() ?? "";
+
+                // Xử lý Lock_Date (vì nếu tài khoản không bị khóa, trường này sẽ là NULL)
+                if (row["LOCK_DATE"] != DBNull.Value)
+                    profile.LockDate = Convert.ToDateTime(row["LOCK_DATE"]).ToString("dd/MM/yyyy HH:mm");
+                else
+                    profile.LockDate = "Không bị khóa";
             }
 
-            // LƯU Ý BẢO MẬT 2: Dùng chính tài khoản user đăng nhập kết nối để gọi view USER_ nhằm cô lập dữ liệu
+            // 2. Dùng tài khoản CHÍNH USER ĐÓ lấy quyền và Quota (Cô lập dữ liệu hệ thống)
             using (var conn = _connManager.GetConnectionWithCredentials(username, password))
             {
                 conn.Open();
 
-                // a. Lấy danh sách Vai trò (Roles) của chính user
-                string sqlRoles = "SELECT ROLE, 'Có' AS IS_DIRECT, ADMIN_OPTION FROM USER_ROLE_PRIVS";
+                // a. Lấy Role
+                string sqlRoles = "SELECT GRANTED_ROLE AS ROLE, 'Có' AS IS_DIRECT, ADMIN_OPTION FROM USER_ROLE_PRIVS";
                 using (var cmd = new OracleCommand(sqlRoles, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -118,13 +137,13 @@ namespace DAL.Repositories.Implementations
                     }
                 }
 
-                // b. Lấy danh sách Quyền Hệ Thống (System Privileges) gồm cả trực tiếp và qua Role
+                // b. Lấy Quyền Hệ thống
                 string sqlSysPrivs = @"
-                    SELECT PRIVILEGE, 'Trực tiếp' AS GRANTED_VIA, ADMIN_OPTION FROM USER_SYS_PRIVS
-                    UNION ALL
-                    SELECT PRIVILEGE, 'Qua Role: ' || ROLE AS GRANTED_VIA, ADMIN_OPTION 
-                    FROM ROLE_SYS_PRIVS 
-                    WHERE ROLE IN (SELECT ROLE FROM USER_ROLE_PRIVS)";
+                                        SELECT PRIVILEGE, 'Trực tiếp' AS GRANTED_VIA, ADMIN_OPTION FROM USER_SYS_PRIVS
+                                        UNION ALL
+                                        SELECT PRIVILEGE, 'Qua Role: ' || ROLE AS GRANTED_VIA, ADMIN_OPTION 
+                                        FROM ROLE_SYS_PRIVS 
+                                        WHERE ROLE IN (SELECT GRANTED_ROLE FROM USER_ROLE_PRIVS)";
                 using (var cmd = new OracleCommand(sqlSysPrivs, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -139,8 +158,8 @@ namespace DAL.Repositories.Implementations
                     }
                 }
 
-                // c. Lấy danh sách Quyền Đối Tượng (Object Privileges) trên các bảng công ty
-                string sqlObjPrivs = "SELECT TABLE_NAME, PRIVILEGE, GRANTOR, GRANTABLE FROM USER_TAB_PRIVS";
+                // c. Lấy Quyền Đối tượng (Chỉ lấy Bảng và Khung nhìn)
+                string sqlObjPrivs = "SELECT TABLE_NAME, PRIVILEGE, GRANTOR, GRANTABLE FROM USER_TAB_PRIVS WHERE TYPE IN ('TABLE', 'VIEW')";
                 using (var cmd = new OracleCommand(sqlObjPrivs, conn))
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -152,6 +171,25 @@ namespace DAL.Repositories.Implementations
                             PrivilegeName = reader["PRIVILEGE"].ToString() ?? "",
                             GrantedBy = reader["GRANTOR"].ToString() ?? "",
                             Grantable = reader["GRANTABLE"].ToString() ?? "NO"
+                        });
+                    }
+                }
+
+                // d. Lấy Quota
+                string sqlQuota = "SELECT TABLESPACE_NAME, BYTES, MAX_BYTES FROM USER_TS_QUOTAS";
+                using (var cmd = new OracleCommand(sqlQuota, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string maxBytesStr = reader["MAX_BYTES"].ToString();
+                        string displayMax = (maxBytesStr == "-1") ? "Unlimited" : maxBytesStr;
+
+                        profile.Quotas.Add(new QuotaDTO
+                        {
+                            TablespaceName = reader["TABLESPACE_NAME"].ToString() ?? "",
+                            Bytes = reader["BYTES"].ToString() ?? "0",
+                            MaxBytes = displayMax
                         });
                     }
                 }

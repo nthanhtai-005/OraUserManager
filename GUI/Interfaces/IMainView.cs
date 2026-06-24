@@ -10,5 +10,8 @@ namespace GUI.Interfaces
         void SetRoleMenuVisibility(bool isVisible);
         void SetProfileMenuVisibility(bool isVisible);
         void DisplayUserProfile(UserProfileDTO profile);
+        event EventHandler LogoutClicked; // Sự kiện khi bấm nút
+        bool IsLogout { get; set; }     
+        void CloseView();
     }
 }

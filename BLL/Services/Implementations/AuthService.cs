@@ -45,5 +45,9 @@ namespace BLL.Services.Implementations
             string currentUsername = SessionContext.CurrentUsername;
             return _authRepo.GetUserDashboardData(currentUsername, rawPassword);
         }
+        public void Logout()
+        {
+            SessionContext.ClearSession();
+        }
     }
 }

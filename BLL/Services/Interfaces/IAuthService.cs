@@ -6,5 +6,6 @@ namespace BLL.Services.Interfaces
         // Khai báo phương thức đăng nhập để Presenter gọi
         bool Login(string username, string rawPassword);
         UserProfileDTO GetLoggedInUserProfile(string rawPassword);
+        void Logout();
     }
 }

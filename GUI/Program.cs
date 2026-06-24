@@ -14,22 +14,35 @@ namespace GUI
         {
             ApplicationConfiguration.Initialize();
 
-            // 1. Khởi tạo các Dependencies
             var authRepo = new AuthRepo();
             var authService = new AuthService(authRepo);
 
-            // 2. Lắp ráp Form Login
-            var loginView = new frmLogin();
-            var loginPresenter = new LoginPresenter(loginView, authService);
-
-            if (loginView.ShowDialog() == DialogResult.OK)
+            bool keepRunning = true;
+            while (keepRunning)
             {
-                // Lắp ráp Form Main theo chuẩn MVP trước khi hiển thị
-                var mainView = new frmMain();
-                var mainPresenter = new MainPresenter(mainView, authService, loginView.Password);
+                var loginView = new frmLogin();
+                var loginPresenter = new LoginPresenter(loginView, authService);
 
-                // Mở Form Main làm form chính của App
-                Application.Run(mainView);
+                if (loginView.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var mainView = new frmMain();
+                        var mainPresenter = new MainPresenter(mainView, authService, loginView.Password);
+
+                        Application.Run(mainView);
+                        keepRunning = mainView.IsLogout;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi Hệ Thống", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        keepRunning = false;
+                    }
+                }
+                else
+                {
+                    keepRunning = false;
+                }
             }
         }
     }

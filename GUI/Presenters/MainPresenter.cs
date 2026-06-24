@@ -18,6 +18,7 @@ namespace GUI.Presenters
 
             ApplySecurityPolicies();
             LoadDashboardData();
+            _view.LogoutClicked += OnLogoutClicked;
         }
         private void ApplySecurityPolicies()
         {
@@ -46,6 +47,17 @@ namespace GUI.Presenters
 
             // Ra lệnh đẩy ngược lên View hiển thị
             _view.DisplayUserProfile(profileData);
+        }
+        private void OnLogoutClicked(object sender, EventArgs e)
+        {
+            // 1. Xóa thông tin đăng nhập trong hệ thống
+            _authService.Logout();
+
+            // 2. Bật cờ đánh dấu đây là hành động Đăng xuất
+            _view.IsLogout = true;
+
+            // 3. Ra lệnh đóng Form Main
+            _view.CloseView();
         }
     }
 }
