@@ -17,5 +17,34 @@ namespace GUI.Views
         {
             InitializeComponent();
         }
+        public void SetUserMenuVisibility(bool isVisible)
+        {
+            btnQuanLyUser.Visible = isVisible; // Hoặc .Enabled = isVisible
+        }
+
+        public void SetRoleMenuVisibility(bool isVisible)
+        {
+            btnQuanLyRole.Visible = isVisible;
+        }
+
+        public void SetProfileMenuVisibility(bool isVisible)
+        {
+            btnQuanLyProfile.Visible = isVisible;
+        }
+
+        private void btnQuanLyUser_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnQuanLyRole_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnQuanLyProfile_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

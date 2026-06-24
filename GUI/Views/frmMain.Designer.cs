@@ -28,12 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "frmMain";
+            btnQuanLyUser = new Button();
+            btnQuanLyRole = new Button();
+            btnQuanLyProfile = new Button();
+            SuspendLayout();
+            // 
+            // btnQuanLyUser
+            // 
+            btnQuanLyUser.Location = new Point(33, 45);
+            btnQuanLyUser.Name = "btnQuanLyUser";
+            btnQuanLyUser.Size = new Size(138, 29);
+            btnQuanLyUser.TabIndex = 0;
+            btnQuanLyUser.Text = "btnQuanLyUser";
+            btnQuanLyUser.UseVisualStyleBackColor = true;
+            btnQuanLyUser.Click += btnQuanLyUser_Click;
+            // 
+            // btnQuanLyRole
+            // 
+            btnQuanLyRole.Location = new Point(33, 122);
+            btnQuanLyRole.Name = "btnQuanLyRole";
+            btnQuanLyRole.Size = new Size(138, 29);
+            btnQuanLyRole.TabIndex = 1;
+            btnQuanLyRole.Text = "btnQuanLyRole";
+            btnQuanLyRole.UseVisualStyleBackColor = true;
+            btnQuanLyRole.Click += btnQuanLyRole_Click;
+            // 
+            // btnQuanLyProfile
+            // 
+            btnQuanLyProfile.Location = new Point(33, 211);
+            btnQuanLyProfile.Name = "btnQuanLyProfile";
+            btnQuanLyProfile.Size = new Size(138, 29);
+            btnQuanLyProfile.TabIndex = 2;
+            btnQuanLyProfile.Text = "btnQuanLyProfile";
+            btnQuanLyProfile.UseVisualStyleBackColor = true;
+            btnQuanLyProfile.Click += btnQuanLyProfile_Click;
+            // 
+            // frmMain
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btnQuanLyProfile);
+            Controls.Add(btnQuanLyRole);
+            Controls.Add(btnQuanLyUser);
+            Name = "frmMain";
+            Text = "frmMain";
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button btnQuanLyUser;
+        private Button btnQuanLyRole;
+        private Button btnQuanLyProfile;
     }
 }

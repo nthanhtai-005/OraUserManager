@@ -4,6 +4,9 @@ namespace GUI.Interfaces
 {
     public interface IMainView
     {
-        // Tạm thời để trống, sau này bạn sẽ thêm các sự kiện click menu vào đây
+        // Các hàm để Presenter ra lệnh
+        void SetUserMenuVisibility(bool isVisible);
+        void SetRoleMenuVisibility(bool isVisible);
+        void SetProfileMenuVisibility(bool isVisible);
     }
 }

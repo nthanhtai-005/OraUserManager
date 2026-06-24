@@ -58,5 +58,27 @@ namespace DAL.Repositories.Implementations
                 return false;
             }
         }
+        public List<string> GetSessionPrivileges(string username, string password)
+        {
+            List<string> privileges = new List<string>();
+            string sql = "SELECT privilege FROM session_privs";
+
+            // Mở kết nối BẰNG CHÍNH TÀI KHOẢN CỦA USER ĐANG LOG IN
+            using (var conn = _connManager.GetConnectionWithCredentials(username, password))
+            {
+                conn.Open();
+                using (var cmd = new OracleCommand(sql, conn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            privileges.Add(reader["privilege"].ToString());
+                        }
+                    }
+                }
+            }
+            return privileges;
+        }
     }
 }

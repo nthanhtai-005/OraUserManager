@@ -27,6 +27,16 @@ namespace BLL.Services.Implementations
             bool isDbLoginSuccess = _authRepo.TestDatabaseLogin(username, rawPassword);
             if (!isDbLoginSuccess) return false;
 
+            // 3. Nạp Session
+            SessionContext.ClearSession();
+            SessionContext.CurrentUsername = username;
+
+            // Lấy quyền từ DAL và lưu vào Session
+            var privs = _authRepo.GetSessionPrivileges(username, rawPassword);
+            foreach (var priv in privs)
+            {
+                SessionContext.SystemPrivileges.Add(priv);
+            }
             return true;
         }
     }
