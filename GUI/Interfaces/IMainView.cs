@@ -14,5 +14,6 @@ namespace GUI.Interfaces
         bool IsLogout { get; set; }     
         void CloseView();
         event EventHandler OpenUserManagerClicked;
+        event EventHandler OpenProfileManagerClicked;
     }
 }

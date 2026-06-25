@@ -91,10 +91,10 @@ namespace GUI.Views
         {
 
         }
-
+        public event EventHandler OpenProfileManagerClicked;
         private void btnQuanLyProfile_Click(object sender, EventArgs e)
         {
-
+            OpenProfileManagerClicked?.Invoke(this, EventArgs.Empty);
         }
         public bool IsLogout { get; set; } = false;
         public event EventHandler LogoutClicked;
