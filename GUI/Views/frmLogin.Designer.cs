@@ -35,6 +35,7 @@
             // 
             // txtUsername
             // 
+            txtUsername.CharacterCasing = CharacterCasing.Upper;
             txtUsername.Location = new Point(116, 65);
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(125, 27);

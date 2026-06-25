@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using DTO;
 using GUI.Interfaces;
-using DAL.Repositories.Interfaces;
+using BLL.Services.Interfaces; // ĐỔI TỪ DAL SANG BLL
 using BLL.Security;
 
 namespace GUI.Presenters
@@ -10,16 +10,15 @@ namespace GUI.Presenters
     public class UserManagerPresenter
     {
         private readonly IUserManagerView _view;
-        private readonly IUserRepo _userRepo;
+        private readonly IUserService _userService; 
         private readonly string _currentPassword;
 
-        public UserManagerPresenter(IUserManagerView view, IUserRepo userRepo, string currentPassword)
+        public UserManagerPresenter(IUserManagerView view, IUserService userService, string currentPassword)
         {
             _view = view;
-            _userRepo = userRepo;
+            _userService = userService;
             _currentPassword = currentPassword;
 
-            // Lắng nghe các sự kiện thao tác từ Form
             _view.LoadData += OnLoadData;
             _view.SaveClicked += OnSaveClicked;
             _view.DeleteClicked += OnDeleteClicked;
@@ -29,19 +28,18 @@ namespace GUI.Presenters
         {
             try
             {
-                var tsList = _userRepo.GetTablespaces();
+                var tsList = _userService.GetTablespaces();
                 _view.LoadTablespaces(tsList);
-                var profileList = _userRepo.GetProfiles();
+
+                var profileList = _userService.GetProfiles();
                 _view.LoadProfiles(profileList);
-                // 1. Lấy danh sách lên lưới (Grid)
-                var users = _userRepo.GetAllUsers(SessionContext.CurrentUsername, _currentPassword);
+
+                var users = _userService.GetAllUsers(SessionContext.CurrentUsername, _currentPassword);
                 _view.LoadUserList(users);
 
-                // 2. Kiểm tra quyền và Bật/Tắt các nút Tạo, Sửa, Xóa tương ứng
                 bool canCreate = SessionContext.HasPrivilege("CREATE USER");
                 bool canEdit = SessionContext.HasPrivilege("ALTER USER");
                 bool canDrop = SessionContext.HasPrivilege("DROP USER");
-
                 _view.SetActionButtonsVisibility(canCreate, canEdit, canDrop);
             }
             catch (Exception ex)
@@ -54,7 +52,6 @@ namespace GUI.Presenters
         {
             try
             {
-                // 1. Gom dữ liệu từ giao diện vào DTO
                 var user = new AppUserDTO
                 {
                     Username = _view.Username,
@@ -68,33 +65,31 @@ namespace GUI.Presenters
                     ProfileName = _view.ProfileName
                 };
 
-                // 2. Tạo Hash & Salt
                 string salt = HashHelper.GenerateSalt();
                 string hash = string.IsNullOrEmpty(user.RawPassword) ? "" : HashHelper.HashPassword(user.RawPassword, salt);
 
-                // 3. Phân nhánh Tạo mới hoặc Sửa
                 if (_view.IsCreating)
                 {
                     if (string.IsNullOrWhiteSpace(user.RawPassword))
                     {
                         _view.ShowMessage("Vui lòng nhập mật khẩu cho User mới!", true); return;
                     }
-                    _userRepo.CreateUser(user, SessionContext.CurrentUsername, _currentPassword, hash, salt);
+                    _userService.CreateUser(user, SessionContext.CurrentUsername, _currentPassword, hash, salt);
                     _view.ShowMessage("Tạo mới User thành công!", false);
                 }
                 else
                 {
                     bool updatePassword = !string.IsNullOrWhiteSpace(user.RawPassword);
-                    _userRepo.UpdateUser(user, SessionContext.CurrentUsername, _currentPassword, hash, salt, updatePassword);
+                    _userService.UpdateUser(user, SessionContext.CurrentUsername, _currentPassword, hash, salt, updatePassword);
                     _view.ShowMessage("Cập nhật User thành công!", false);
                 }
 
                 _view.SetControlState(false);
-                OnLoadData(this, EventArgs.Empty); 
+                OnLoadData(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
-                _view.ShowMessage("Lỗi: Bạn không có quyền thực hiện hoặc sai cú pháp!\n" + ex.Message, true);
+                _view.ShowMessage("Thông báo nghiệp vụ: " + ex.Message, true);
             }
         }
 
@@ -108,13 +103,13 @@ namespace GUI.Presenters
             {
                 try
                 {
-                    _userRepo.DropUser(_view.Username, SessionContext.CurrentUsername, _currentPassword);
+                    _userService.DropUser(_view.Username, SessionContext.CurrentUsername, _currentPassword);
                     _view.ShowMessage("Xóa User thành công!", false);
                     OnLoadData(this, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
-                    _view.ShowMessage("Lỗi xóa User: " + ex.Message, true);
+                    _view.ShowMessage("Lỗi hệ thống: " + ex.Message, true);
                 }
             }
         }

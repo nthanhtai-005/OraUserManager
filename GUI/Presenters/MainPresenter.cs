@@ -36,19 +36,19 @@ namespace GUI.Presenters
 
         private void OnOpenUserManagerClicked(object sender, EventArgs e)
         {
-            var userView = new frmUserManager();
-            var userRepo = new UserRepo();
-            var userPresenter = new UserManagerPresenter(userView, userRepo, _rawPassword);
+            var userView = new frmUserManager();              
+            var userRepo = new UserRepo();                    
+            var userService = new UserService(userRepo);
+            var userPresenter = new UserManagerPresenter(userView, userService, _rawPassword);
             ((Form)userView).ShowDialog();
         }
 
         private void OnOpenProfileManagerClicked(object sender, EventArgs e)
         {
-            var view = new frmProfileManager();               // 1. Khởi tạo Giao diện (GUI)
-            var repo = new ProfileRepo();                     // 2. Khởi tạo Kho lưu trữ (DAL)
-            var service = new ProfileService(repo);           // 3. Khởi tạo Nghiệp vụ (BLL) và tiêm DAL vào
+            var view = new frmProfileManager();               
+            var repo = new ProfileRepo();                     
+            var service = new ProfileService(repo);           
 
-            // 4. Khởi tạo Điều hướng (Presenter) và tiêm Service vào
             var presenter = new ProfileManagerPresenter(view, service, _rawPassword);
 
             ((Form)view).ShowDialog();
