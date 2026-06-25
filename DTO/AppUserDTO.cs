@@ -13,6 +13,7 @@ namespace DTO
         public string DefaultTablespace { get; set; } = "USERS";
         public string TempTablespace { get; set; } = "TEMP";
         public string QuotaAmount { get; set; } = "UNLIMITED";
+        public string ProfileName { get; set; } = "DEFAULT";
         public bool IsLocked { get; set; } = false;
 
         public DateTime CreatedDate { get; set; }

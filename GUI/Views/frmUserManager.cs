@@ -81,6 +81,7 @@ namespace GUI.Views
                     txtQuota.Text = number;
                     cboQuotaUnit.Text = unit;
                 }
+                cboProfile.Text = user.ProfileName;
             }
             SelectionChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -141,8 +142,10 @@ namespace GUI.Views
             btnSave.Visible = isEditing;
             btnCancel.Visible = isEditing;
 
-            // Username chỉ cho phép nhập khi Đang Tạo Mới (Không cho sửa Tên Oracle)
+            // Username chỉ cho phép nhập khi Đang Tạo Mới
             txtUsername.Enabled = IsCreating && isEditing;
+            // Profile
+            cboProfile.Enabled = isEditing;
         }
 
         // Hàm này đáp ứng đúng yêu cầu: User không có quyền nào sẽ ẩn nút của quyền đó
@@ -202,6 +205,12 @@ namespace GUI.Views
             // Gán vào ComboBox
             cboDefaultTS.DataSource = new List<string>(listWithEmpty);
             cboTempTS.DataSource = new List<string>(listWithEmpty);
+        }
+        public string ProfileName { get => cboProfile.Text; set => cboProfile.Text = value; }
+
+        public void LoadProfiles(List<string> profiles)
+        {
+            cboProfile.DataSource = new List<string>(profiles);
         }
     }
 }

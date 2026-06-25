@@ -22,12 +22,12 @@ namespace DAL.Repositories.Implementations
 
             // Câu SQL kết hợp bảng của ứng dụng và Từ điển dữ liệu của Oracle
             string sql = @"
-                            SELECT a.USERNAME, a.FULLNAME, a.EMAIL, a.CREATED_DATE,
-                            u.ACCOUNT_STATUS, u.DEFAULT_TABLESPACE, u.TEMPORARY_TABLESPACE,
-                            q.MAX_BYTES
-                            FROM ADMIN_BM.APP_USERS a
-                            JOIN DBA_USERS u ON a.USERNAME = u.USERNAME
-                            LEFT JOIN DBA_TS_QUOTAS q ON a.USERNAME = q.USERNAME AND u.DEFAULT_TABLESPACE = q.TABLESPACE_NAME";
+                        SELECT a.USERNAME, a.FULLNAME, a.EMAIL, a.CREATED_DATE,
+                               u.ACCOUNT_STATUS, u.DEFAULT_TABLESPACE, u.TEMPORARY_TABLESPACE, u.PROFILE,
+                               q.MAX_BYTES
+                        FROM ADMIN_BM.APP_USERS a
+                        JOIN DBA_USERS u ON a.USERNAME = u.USERNAME
+                        LEFT JOIN DBA_TS_QUOTAS q ON a.USERNAME = q.USERNAME AND u.DEFAULT_TABLESPACE = q.TABLESPACE_NAME";
 
             // Sử dụng kết nối ngầm định của ADMIN để luôn đọc được view DBA_USERS
             using (var conn = _connManager.GetConnection())
@@ -48,6 +48,8 @@ namespace DAL.Repositories.Implementations
                             // Lấy Tablespace hiện tại
                             DefaultTablespace = reader["DEFAULT_TABLESPACE"].ToString(),
                             TempTablespace = reader["TEMPORARY_TABLESPACE"].ToString(),
+                            // Profile
+                            ProfileName = reader["PROFILE"].ToString(),
 
                             IsLocked = reader["ACCOUNT_STATUS"].ToString().Contains("LOCKED")
                         };
@@ -88,6 +90,7 @@ namespace DAL.Repositories.Implementations
                         string sqlCreate = $"CREATE USER {user.Username} IDENTIFIED BY \"{user.RawPassword}\" " +
                                            $"DEFAULT TABLESPACE {user.DefaultTablespace} " +
                                            $"TEMPORARY TABLESPACE {user.TempTablespace} " +
+                                           $"PROFILE {user.ProfileName} " +
                                            $"{accountStatus}";
                         using (var cmdCreate = new OracleCommand(sqlCreate, conn)) { cmdCreate.ExecuteNonQuery(); }
 
@@ -165,6 +168,10 @@ namespace DAL.Repositories.Implementations
                         {
                             sqlAlter += $"TEMPORARY TABLESPACE {user.TempTablespace} ";
                         }
+                        if (!string.IsNullOrWhiteSpace(user.ProfileName))
+                        {
+                            sqlAlter += $"PROFILE {user.ProfileName} ";
+                        }
 
                         // Chạy lệnh ALTER USER
                         using (var cmdAlter = new OracleCommand(sqlAlter, conn)) { cmdAlter.ExecuteNonQuery(); }
@@ -233,6 +240,25 @@ namespace DAL.Repositories.Implementations
                     while (reader.Read())
                     {
                         list.Add(reader["TABLESPACE_NAME"].ToString());
+                    }
+                }
+            }
+            return list;
+        }
+        public List<string> GetProfiles()
+        {
+            var list = new List<string>();
+            string sql = "SELECT DISTINCT PROFILE FROM DBA_PROFILES";
+
+            using (var conn = _connManager.GetConnection())
+            {
+                conn.Open();
+                using (var cmd = new OracleCommand(sql, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list.Add(reader["PROFILE"].ToString());
                     }
                 }
             }

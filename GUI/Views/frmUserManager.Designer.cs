@@ -44,6 +44,16 @@
             btnDelete = new Button();
             btnSave = new Button();
             btnCancel = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            cboProfile = new ComboBox();
+            label9 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvUsers).BeginInit();
             SuspendLayout();
             // 
@@ -52,39 +62,39 @@
             dgvUsers.AllowUserToAddRows = false;
             dgvUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvUsers.Location = new Point(12, 67);
+            dgvUsers.Location = new Point(12, 46);
             dgvUsers.Name = "dgvUsers";
             dgvUsers.ReadOnly = true;
             dgvUsers.RowHeadersWidth = 51;
             dgvUsers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvUsers.Size = new Size(393, 226);
+            dgvUsers.Size = new Size(476, 226);
             dgvUsers.TabIndex = 0;
             // 
             // txtUsername
             // 
             txtUsername.CharacterCasing = CharacterCasing.Upper;
-            txtUsername.Location = new Point(595, 67);
+            txtUsername.Location = new Point(595, 68);
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(195, 27);
             txtUsername.TabIndex = 1;
             // 
             // txtFullName
             // 
-            txtFullName.Location = new Point(595, 119);
+            txtFullName.Location = new Point(595, 136);
             txtFullName.Name = "txtFullName";
             txtFullName.Size = new Size(195, 27);
             txtFullName.TabIndex = 2;
             // 
             // txtEmail
             // 
-            txtEmail.Location = new Point(869, 119);
+            txtEmail.Location = new Point(869, 136);
             txtEmail.Name = "txtEmail";
             txtEmail.Size = new Size(195, 27);
             txtEmail.TabIndex = 3;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(595, 182);
+            txtPassword.Location = new Point(595, 203);
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(195, 27);
             txtPassword.TabIndex = 4;
@@ -92,7 +102,7 @@
             // cboDefaultTS
             // 
             cboDefaultTS.FormattingEnabled = true;
-            cboDefaultTS.Location = new Point(595, 244);
+            cboDefaultTS.Location = new Point(595, 266);
             cboDefaultTS.Name = "cboDefaultTS";
             cboDefaultTS.Size = new Size(195, 28);
             cboDefaultTS.TabIndex = 5;
@@ -100,31 +110,31 @@
             // cboTempTS
             // 
             cboTempTS.FormattingEnabled = true;
-            cboTempTS.Location = new Point(869, 244);
+            cboTempTS.Location = new Point(869, 266);
             cboTempTS.Name = "cboTempTS";
             cboTempTS.Size = new Size(195, 28);
             cboTempTS.TabIndex = 6;
             // 
             // txtQuota
             // 
-            txtQuota.Location = new Point(595, 305);
+            txtQuota.Location = new Point(595, 327);
             txtQuota.Name = "txtQuota";
-            txtQuota.Size = new Size(195, 27);
+            txtQuota.Size = new Size(151, 27);
             txtQuota.TabIndex = 7;
             // 
             // cboQuotaUnit
             // 
             cboQuotaUnit.FormattingEnabled = true;
             cboQuotaUnit.Items.AddRange(new object[] { "M", "G" });
-            cboQuotaUnit.Location = new Point(869, 304);
+            cboQuotaUnit.Location = new Point(869, 326);
             cboQuotaUnit.Name = "cboQuotaUnit";
-            cboQuotaUnit.Size = new Size(151, 28);
+            cboQuotaUnit.Size = new Size(91, 28);
             cboQuotaUnit.TabIndex = 8;
             // 
             // radUnlock
             // 
             radUnlock.AutoSize = true;
-            radUnlock.Location = new Point(649, 372);
+            radUnlock.Location = new Point(595, 383);
             radUnlock.Name = "radUnlock";
             radUnlock.Size = new Size(97, 24);
             radUnlock.TabIndex = 9;
@@ -135,7 +145,7 @@
             // radLock
             // 
             radLock.AutoSize = true;
-            radLock.Location = new Point(878, 372);
+            radLock.Location = new Point(725, 383);
             radLock.Name = "radLock";
             radLock.Size = new Size(82, 24);
             radLock.TabIndex = 10;
@@ -145,7 +155,7 @@
             // 
             // btnCreate
             // 
-            btnCreate.Location = new Point(77, 485);
+            btnCreate.Location = new Point(36, 327);
             btnCreate.Name = "btnCreate";
             btnCreate.Size = new Size(94, 29);
             btnCreate.TabIndex = 11;
@@ -155,7 +165,7 @@
             // 
             // btnEdit
             // 
-            btnEdit.Location = new Point(220, 485);
+            btnEdit.Location = new Point(183, 327);
             btnEdit.Name = "btnEdit";
             btnEdit.Size = new Size(94, 29);
             btnEdit.TabIndex = 12;
@@ -165,7 +175,7 @@
             // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(349, 485);
+            btnDelete.Location = new Point(318, 327);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(94, 29);
             btnDelete.TabIndex = 13;
@@ -175,7 +185,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(793, 485);
+            btnSave.Location = new Point(595, 436);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(94, 29);
             btnSave.TabIndex = 14;
@@ -185,7 +195,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.Location = new Point(926, 485);
+            btnCancel.Location = new Point(725, 436);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(94, 29);
             btnCancel.TabIndex = 15;
@@ -193,11 +203,110 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(595, 45);
+            label1.Name = "label1";
+            label1.Size = new Size(75, 20);
+            label1.TabIndex = 16;
+            label1.Text = "Username";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(595, 113);
+            label2.Name = "label2";
+            label2.Size = new Size(49, 20);
+            label2.TabIndex = 17;
+            label2.Text = "Name";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(869, 113);
+            label3.Name = "label3";
+            label3.Size = new Size(46, 20);
+            label3.TabIndex = 18;
+            label3.Text = "Email";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(595, 180);
+            label4.Name = "label4";
+            label4.Size = new Size(70, 20);
+            label4.TabIndex = 19;
+            label4.Text = "Password";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(595, 243);
+            label5.Name = "label5";
+            label5.Size = new Size(135, 20);
+            label5.TabIndex = 20;
+            label5.Text = "Default Tablespace";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(869, 243);
+            label6.Name = "label6";
+            label6.Size = new Size(123, 20);
+            label6.TabIndex = 21;
+            label6.Text = "Temp Tablespace";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(595, 304);
+            label7.Name = "label7";
+            label7.Size = new Size(50, 20);
+            label7.TabIndex = 22;
+            label7.Text = "Quota";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(869, 304);
+            label8.Name = "label8";
+            label8.Size = new Size(52, 20);
+            label8.TabIndex = 23;
+            label8.Text = "Don vi";
+            // 
+            // cboProfile
+            // 
+            cboProfile.FormattingEnabled = true;
+            cboProfile.Location = new Point(869, 202);
+            cboProfile.Name = "cboProfile";
+            cboProfile.Size = new Size(195, 28);
+            cboProfile.TabIndex = 24;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(869, 179);
+            label9.Name = "label9";
+            label9.Size = new Size(52, 20);
+            label9.TabIndex = 25;
+            label9.Text = "Profile";
+            // 
             // frmUserManager
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1093, 565);
+            ClientSize = new Size(1093, 489);
+            Controls.Add(label9);
+            Controls.Add(cboProfile);
+            Controls.Add(label8);
+            Controls.Add(label7);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
             Controls.Add(btnDelete);
@@ -239,5 +348,15 @@
         private Button btnDelete;
         private Button btnSave;
         private Button btnCancel;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
+        private Label label5;
+        private Label label6;
+        private Label label7;
+        private Label label8;
+        private ComboBox cboProfile;
+        private Label label9;
     }
 }

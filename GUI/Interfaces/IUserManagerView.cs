@@ -32,5 +32,7 @@ namespace GUI.Interfaces
         event EventHandler SaveClicked;
         event EventHandler DeleteClicked;
         event EventHandler SelectionChanged;
+        string ProfileName { get; set; }
+        void LoadProfiles(List<string> profiles);
     }
 }

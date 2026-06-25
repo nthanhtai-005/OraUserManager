@@ -31,6 +31,8 @@ namespace GUI.Presenters
             {
                 var tsList = _userRepo.GetTablespaces();
                 _view.LoadTablespaces(tsList);
+                var profileList = _userRepo.GetProfiles();
+                _view.LoadProfiles(profileList);
                 // 1. Lấy danh sách lên lưới (Grid)
                 var users = _userRepo.GetAllUsers(SessionContext.CurrentUsername, _currentPassword);
                 _view.LoadUserList(users);
@@ -62,7 +64,8 @@ namespace GUI.Presenters
                     DefaultTablespace = _view.DefaultTablespace,
                     TempTablespace = _view.TempTablespace,
                     QuotaAmount = _view.QuotaAmount,
-                    IsLocked = _view.IsLocked
+                    IsLocked = _view.IsLocked,
+                    ProfileName = _view.ProfileName
                 };
 
                 // 2. Tạo Hash & Salt
