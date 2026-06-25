@@ -13,5 +13,6 @@ namespace GUI.Interfaces
         event EventHandler LogoutClicked; // Sự kiện khi bấm nút
         bool IsLogout { get; set; }     
         void CloseView();
+        event EventHandler OpenUserManagerClicked;
     }
 }

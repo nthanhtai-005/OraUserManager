@@ -1,7 +1,9 @@
 ﻿using BLL.Security;
 using BLL.Services.Implementations;
 using BLL.Services.Interfaces;
+using DAL.Repositories.Implementations;
 using GUI.Interfaces;
+using GUI.Views;
 
 namespace GUI.Presenters
 {
@@ -19,6 +21,19 @@ namespace GUI.Presenters
             ApplySecurityPolicies();
             LoadDashboardData();
             _view.LogoutClicked += OnLogoutClicked;
+            _view.OpenUserManagerClicked += OnOpenUserManagerClicked;
+        }
+        private void OnOpenUserManagerClicked(object sender, EventArgs e)
+        {
+            // Lắp ráp Form Quản Lý User theo mô hình MVP
+            var userView = new frmUserManager();
+            var userRepo = new UserRepo();
+
+            // Truyền _rawPassword xuống để UserRepo có thể dùng tài khoản hiện tại gọi CSDL
+            var userPresenter = new UserManagerPresenter(userView, userRepo, _rawPassword);
+
+            // Mở Form hiển thị (Dưới dạng hộp thoại Dialog)
+            ((Form)userView).ShowDialog();
         }
         private void ApplySecurityPolicies()
         {

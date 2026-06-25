@@ -80,9 +80,11 @@ namespace GUI.Views
             btnQuanLyProfile.Visible = isVisible;
         }
 
+        public event EventHandler OpenUserManagerClicked;
+
         private void btnQuanLyUser_Click(object sender, EventArgs e)
         {
-
+            OpenUserManagerClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void btnQuanLyRole_Click(object sender, EventArgs e)
