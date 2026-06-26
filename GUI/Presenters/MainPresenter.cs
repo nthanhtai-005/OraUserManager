@@ -24,12 +24,10 @@ namespace GUI.Presenters
             ApplySecurityPolicies();
             LoadDashboardData();
 
-            // ĐĂNG KÝ LẮNG NGHE CÁC SỰ KIỆN TỪ VIEW
             _view.LogoutClicked += OnLogoutClicked;
             _view.OpenUserManagerClicked += OnOpenUserManagerClicked;
-
-            // THÊM DÒNG NÀY ĐỂ LẮNG NGHE NÚT QUẢN LÝ PROFILE
             _view.OpenProfileManagerClicked += OnOpenProfileManagerClicked;
+            _view.OpenRoleManagerClicked += OnOpenRoleManagerClicked;
         }
 
         // --- CÁC HÀM XỬ LÝ MỞ FORM CON ---
@@ -88,6 +86,14 @@ namespace GUI.Presenters
             _authService.Logout();
             _view.IsLogout = true;
             _view.CloseView();
+        }
+        private void OnOpenRoleManagerClicked(object sender, EventArgs e)
+        {
+            var view = new frmRoleManager();
+            var repo = new RoleRepo();
+            var service = new RoleService(repo);
+            var presenter = new RoleManagerPresenter(view, service, _rawPassword);
+            ((Form)view).ShowDialog();
         }
     }
 }

@@ -86,10 +86,10 @@ namespace GUI.Views
         {
             OpenUserManagerClicked?.Invoke(this, EventArgs.Empty);
         }
-
+        public event EventHandler OpenRoleManagerClicked;
         private void btnQuanLyRole_Click(object sender, EventArgs e)
         {
-
+            OpenRoleManagerClicked?.Invoke(this, EventArgs.Empty);
         }
         public event EventHandler OpenProfileManagerClicked;
         private void btnQuanLyProfile_Click(object sender, EventArgs e)

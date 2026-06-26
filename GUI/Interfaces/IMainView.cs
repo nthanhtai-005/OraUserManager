@@ -15,5 +15,6 @@ namespace GUI.Interfaces
         void CloseView();
         event EventHandler OpenUserManagerClicked;
         event EventHandler OpenProfileManagerClicked;
+        event EventHandler OpenRoleManagerClicked;
     }
 }
