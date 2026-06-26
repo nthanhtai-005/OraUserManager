@@ -108,5 +108,10 @@ namespace GUI.Views
         {
             LogoutClicked?.Invoke(this, EventArgs.Empty);
         }
+        public event EventHandler OpenPhanQuyenClicked;
+        private void OnOpenPhanQuyenClicked_Click(object sender, EventArgs e)
+        {
+            OpenPhanQuyenClicked?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

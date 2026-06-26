@@ -16,5 +16,6 @@ namespace GUI.Interfaces
         event EventHandler OpenUserManagerClicked;
         event EventHandler OpenProfileManagerClicked;
         event EventHandler OpenRoleManagerClicked;
+        event EventHandler OpenPhanQuyenClicked;
     }
 }

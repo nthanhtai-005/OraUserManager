@@ -28,6 +28,7 @@ namespace GUI.Presenters
             _view.OpenUserManagerClicked += OnOpenUserManagerClicked;
             _view.OpenProfileManagerClicked += OnOpenProfileManagerClicked;
             _view.OpenRoleManagerClicked += OnOpenRoleManagerClicked;
+            _view.OpenPhanQuyenClicked += OnOpenPhanQuyenClicked;
         }
 
         // --- CÁC HÀM XỬ LÝ MỞ FORM CON ---
@@ -93,6 +94,14 @@ namespace GUI.Presenters
             var repo = new RoleRepo();
             var service = new RoleService(repo);
             var presenter = new RoleManagerPresenter(view, service, _rawPassword);
+            ((Form)view).ShowDialog();
+        }
+        private void OnOpenPhanQuyenClicked(object sender, EventArgs e)
+        {
+            var view = new frmPhanQuyen();
+            var repo = new PrivilegeRepo();
+            var service = new PrivilegeService(repo);
+            var presenter = new PhanQuyenPresenter(view, service, _rawPassword);
             ((Form)view).ShowDialog();
         }
     }

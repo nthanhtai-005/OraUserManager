@@ -51,6 +51,7 @@
             lblEmail = new Label();
             lblWelcome = new Label();
             btnLogout = new Button();
+            OnOpenPhanQuyenClicked = new Button();
             pnlDashboard.SuspendLayout();
             tabControlPrivs.SuspendLayout();
             tabPage1.SuspendLayout();
@@ -302,11 +303,22 @@
             btnLogout.UseVisualStyleBackColor = true;
             btnLogout.Click += btnLogout_Click;
             // 
+            // OnOpenPhanQuyenClicked
+            // 
+            OnOpenPhanQuyenClicked.Location = new Point(33, 283);
+            OnOpenPhanQuyenClicked.Name = "OnOpenPhanQuyenClicked";
+            OnOpenPhanQuyenClicked.Size = new Size(138, 29);
+            OnOpenPhanQuyenClicked.TabIndex = 5;
+            OnOpenPhanQuyenClicked.Text = "btnQuanlyPhanquyen";
+            OnOpenPhanQuyenClicked.UseVisualStyleBackColor = true;
+            OnOpenPhanQuyenClicked.Click += OnOpenPhanQuyenClicked_Click;
+            // 
             // frmMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1184, 583);
+            Controls.Add(OnOpenPhanQuyenClicked);
             Controls.Add(btnLogout);
             Controls.Add(pnlDashboard);
             Controls.Add(btnQuanLyProfile);
@@ -353,5 +365,6 @@
         private TabPage tabPage4;
         private DataGridView dgvQuotas;
         private Button btnLogout;
+        private Button OnOpenPhanQuyenClicked;
     }
 }
