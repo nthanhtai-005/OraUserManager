@@ -79,6 +79,10 @@ namespace GUI.Views
         {
             btnQuanLyProfile.Visible = isVisible;
         }
+        public void SetPhanQuyenMenuVisibility(bool isVisible)
+        {
+            OnOpenPhanQuyenClicked.Visible = isVisible;
+        }
 
         public event EventHandler OpenUserManagerClicked;
 

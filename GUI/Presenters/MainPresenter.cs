@@ -74,6 +74,21 @@ namespace GUI.Presenters
                                     SessionContext.HasPrivilege("ALTER PROFILE") ||
                                     SessionContext.HasPrivilege("DROP PROFILE");
             _view.SetProfileMenuVisibility(canManageProfile);
+
+            bool isSuperAdmin = SessionContext.CurrentUsername.ToUpper() == "ADMIN_BM" ||
+                        SessionContext.CurrentUsername.ToUpper() == "SYS";
+            bool hasSuperGrant = SessionContext.HasPrivilege("GRANT ANY PRIVILEGE") ||
+                                 SessionContext.HasPrivilege("GRANT ANY ROLE");
+
+            var privRepo = new DAL.Repositories.Implementations.PrivilegeRepo();
+            var privService = new BLL.Services.Implementations.PrivilegeService(privRepo);
+
+            bool hasGrantableSysPrivs = privService.GetSystemPrivileges(SessionContext.CurrentUsername, _rawPassword).Count > 0;
+            bool hasGrantableObjPrivs = privService.GetTablesAndViews("ADMIN_BM", SessionContext.CurrentUsername, _rawPassword).Count > 0;
+
+            bool canPhanQuyen = isSuperAdmin || hasSuperGrant || hasGrantableSysPrivs || hasGrantableObjPrivs;
+
+            _view.SetPhanQuyenMenuVisibility(canPhanQuyen);
         }
 
         private void LoadDashboardData()
